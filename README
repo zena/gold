@@ -3,7 +3,36 @@ Introduction
 
 This project is just here to test code review and code publication workflow for zena.
 
-Content
-=======
+Init
+====
 
-This is some dummy initial text.
+1. create repository in zena
+2. upload (had to add my name to sandbox users so I could use my ssh key)
+
+Pull
+====
+
+1. To pull john/master:
+
+# git remote add git://github.com/gaspard/sandbox.git
+# git checkout -b gaspard/master
+# git pull defunkt master
+
+Now we have a branch with merged content from current master and current gaspard/master.
+
+2. Review code
+
+3. Rebase
+
+# git rebase master
+
+3. Test
+
+4. Merge into master
+
+# git co master
+# git merge gaspard/master
+
+5. Push changes to github
+
+# git push
