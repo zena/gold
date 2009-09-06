@@ -3,22 +3,35 @@ Introduction
 
 This project is just here to test code review and code publication workflow for zena.
 
+
 Init
 ====
 
 1. create repository in zena
 2. upload (had to add my name to sandbox users so I could use my ssh key)
 
+
+Developer
+=========
+
+1. login on github (John)
+2. fork sandbox
+3. on local machine, clone your own fork
+4. edit
+5. commit
+6. push ====> John's fork
+
+
 Pull
 ====
 
 1. To pull john/master:
 
-# git remote add git://github.com/gaspard/sandbox.git
-# git checkout -b gaspard/master
-# git pull defunkt master
+# git remote add git://github.com/john/sandbox.git
+# git checkout -b john/master
+# git pull john master
 
-Now we have a branch with merged content from current master and current gaspard/master.
+Now we have a branch with merged content from current master and current john/master.
 
 2. Review code
 
@@ -31,8 +44,9 @@ Now we have a branch with merged content from current master and current gaspard
 4. Merge into master
 
 # git co master
-# git merge gaspard/master
+# git merge john/master
 
 5. Push changes to github
 
 # git push
+
