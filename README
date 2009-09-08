@@ -27,7 +27,7 @@ Pull
 
 1. To pull john/master:
 
-# git remote add git://github.com/john/sandbox.git
+# git remote add john git://github.com/john/sandbox.git
 # git checkout -b john/master
 # git pull john master
 
