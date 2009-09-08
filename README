@@ -17,54 +17,36 @@ Developer
 1. login on github (John)
 2. fork sandbox
 3. on local machine, clone your own fork
-4. edit
-5. commit
-6. push ====> John's fork
+> git clone git@github.com:john/sandbox.git
+> git remote add zena git://github.com/zena/sandbox.git
+> git fetch zena
+> git checkout --track -b zena zena/master  # this is the gold master for zena
 
+Working on new 'floppy' feature
+===============================
 
-Pull
-====
-
-1. To pull john/master:
-
-# git remote add john git://github.com/john/sandbox.git
-# git checkout -b john/master
-# git pull john master
-
-Now we have a branch with merged content from current master and current john/master.
-
-2. Review code
-
-3. Rebase
-
-# git rebase master
-
-3. Test
-
-4. Merge into master
-
-# git co master
-# git merge john/master
-
-5. Push changes to github
-
-# git push
-
-Squash tests
-============
-
-Merging two commits...
-
-Working on new 'floppy' feature:
-
+[John] (developer, on his own fork)
 > git co -b floppy
 > commit, commit
 > push origin floppy
-# review
-> commit, commit
+
+[zena] (reviewer)
+> git remote add john git://github.com/john/sandbox.git
+> git fetch john
+> git co -b john/floppy   # why not --track ?
+# review --> no good
+
+[John]
+> reset, commit, squash, etc
+> git push origin +floppy   # force floppy sync
+
+[zena]
 > git co master
-> git merge --squash floppy
+> git branch -D john/floppy   # we would not need this with --track...
+> git co -b john/floppy
+> git rebase master
+# ok
+> git co master
+> git merge --ff john/floppy
+> git branch -D john/floppy
 > git push
-# delete floppy branch
-> git branch -D floppy
-> git push origin :floppy
