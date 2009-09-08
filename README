@@ -66,3 +66,5 @@ Working on new 'floppy' feature:
 > git merge --squash floppy
 > git push
 # delete floppy branch
+> git branch -D floppy
+> git push origin :floppy
