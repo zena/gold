@@ -50,3 +50,19 @@ Now we have a branch with merged content from current master and current john/ma
 
 # git push
 
+Squash tests
+============
+
+Merging two commits...
+
+Working on new 'floppy' feature:
+
+> git co -b floppy
+> commit, commit
+> push origin floppy
+# review
+> commit, commit
+> git co master
+> git merge --squash floppy
+> git push
+# delete floppy branch
