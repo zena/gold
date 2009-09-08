@@ -1,0 +1,144 @@
+#!/usr/bin/ruby
+
+# Sending mail not working on mac os x ?
+# http://www.macosxhints.com/article.php?story=20081217161612647
+
+class Gold
+  Settings = {
+    :gold_branch     => 'gold',                  # name of local branch tracking gold master (in developer's local git)
+    :developer_name  => 'john',                  # developer's name
+    :developer_email => 'developer@example.com', # developer's email
+    :reviewer        => 'reviewer@example.com'   # reviewer's email
+  }
+  
+  def run(args)
+    case args[0]
+    when 'check', 'review'
+      review args[1]
+    when 'ok'
+      ok
+    when 'fail'
+      fail
+    when 'propose'
+      propose
+    when 'cleanup'
+      cleanup
+    else
+      error(%Q{
+
+Reviewer
+========
+
+Checkout a remote branch and view diff
+--------------------------------------
+> gold check remote/branch
+
+Include commits into master branch
+----------------------------------
+(on the new feature branch created by previous 'review')
+> gold ok
+
+The code is not ready yet, cleanup
+----------------------------------
+(on the new feature branch created by previous 'review')
+> gold fail
+
+Developer
+=========
+
+Propose branch
+--------------
+(on the new feature branch)
+> gold propose
+
+Cleanup after commit acceptation
+--------------------------------
+(on the new feature branch)
+> gold cleanup
+
+})
+    end
+  end
+  
+  def propose
+    branch = current_branch
+    return error("Could not find current branch.") unless branch
+    return error("Could not push #{branch} to origin.") unless system("git push origin +#{branch}")
+    message = "#{Settings[:gold_branch]}: review #{Settings[:developer_name]}/#{branch}"
+    return error("Could not send email to #{Settings[:reviewer]}.") unless system(
+    "printf 'From:#{Settings[:developer_email]}\\nSubject: #{message}\\n\\n#{message}' | sendmail -F '#{Settings[:developer_name]}' #{Settings[:reviewer]}")
+    puts "Mail sent to #{Settings[:reviewer]}"
+  end
+  
+  def review(remote_branch)
+    return error("Missing 'remote_branch' parameter.") unless remote_branch
+    return error("'remote_branch' format should be remote/branch.") unless remote_branch =~ /^(.+)\/(.+)$/
+    remote, branch = $1, $2
+    return error("Could not checkout master.") unless system("git co master")
+    return error("Could not checkout #{remote}_#{branch}.") unless system("git co -b #{remote}_#{branch}")
+    return error("Could not pull #{remote_branch}.") unless system("git pull #{remote} #{branch}")
+    return error("Could not rebase.") unless system("git rebase master")
+    system("git diff master | mate")
+    true
+  end
+
+  def ok
+    branch = current_branch
+    return error("Could not find current branch.") unless branch
+    return error("Could not rebase.") unless system("git rebase master")
+    return error("Could not checkout master.") unless system("git co master")
+    return error("Could not fast-forward merge #{branch} into master.") unless system("git merge --ff #{branch}")
+    return error("Could not delete #{branch}.") unless system("git branch -d #{branch}")
+    puts "Successfully applied #{branch} to golden master !\n\nPlease git push when you are ready."
+  end
+  
+  def fail
+    branch = current_branch
+    return error("Could not find current branch.") unless branch
+    return error("You cannot 'fail' master !") unless branch != 'master'
+    return error("Could not checkout master.") unless system("git co master")
+    return nil unless remove(branch, true)
+  end
+  
+  def cleanup
+    branch = current_branch
+    return error("Could not find current branch.") unless branch
+    return error("You cannot 'cleanup' master !") unless branch != 'master'
+    return error("Could not checkout master.") unless system("git co master")
+    return error("Could not pull #{Settings[:gold_branch]} into master.") unless system("git pull #{Settings[:gold_branch]} master")
+    return nil unless remove(branch)
+    return error("Could not clear remote branch.") unless system("git push origin :#{branch}")
+  end
+  
+  
+  private
+    
+    def error(msg)
+      puts msg
+      nil
+    end
+    
+    def current_branch
+      branch = nil
+      `git branch`.split("\n").each do |b|
+        if b =~ /^\*\s+(.+)$/
+          branch = $1
+          break
+        end
+      end
+      branch
+    end
+    
+    def remove(branch, force=false)
+      print "Remove branch #{branch} ? (y,N) "
+      yn = STDIN.gets
+      if yn == "y\n"
+        return error("Could not delete #{branch}.") unless system("git branch -#{force ? 'D' : 'd'} #{branch}")
+      else
+        return error("Could not checkout #{branch}.") unless system("git co #{branch}")
+      end
+      true
+    end
+end
+
+Gold.new.run ARGV

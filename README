@@ -1,18 +1,24 @@
 Introduction
 ============
 
-This project is just here to test code review and code publication workflow for zena.
+This is the workflow we use when developing zena.
 
+The main idea is that developers work on feature branches on their fork and send an
+email to the reviewer when work is ready. The reviewer pulls from these branches,
+checks that all is good and either apply the commits to the gold master or abort.
 
-Init
-====
+There is a script called 'gold' that helps use this workflow once the remote references
+are added.
 
-1. create repository in zena
-2. upload (had to add my name to sandbox users so I could use my ssh key)
+Any questions ? Ask zena's mailing list: http://zenadmin.org/en/community
 
+                                     ~~
+                                     
+Workflow
+========
 
-Developer
-=========
+Developer setup
+---------------
 
 1. login on github (John)
 2. fork sandbox
@@ -23,7 +29,7 @@ Developer
 > git checkout --track -b zena zena/master  # this is the gold master for zena
 
 Working on new 'floppy' feature
-===============================
+-------------------------------
 
 [John] (developer, on his own fork)
 > git co -b floppy
