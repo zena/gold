@@ -17,42 +17,63 @@ Any questions ? Ask zena's mailing list: http://zenadmin.org/en/community
 Workflow
 ========
 
+Replace 'PROJECT' by 'zena' to work on zena or any other project name you
+are working on.
+
 Developer setup
 ---------------
 
 1. login on github (John)
 2. fork sandbox
 3. on local machine, clone your own fork
-> git clone git@github.com:john/sandbox.git
-> git remote add zena git://github.com/zena/sandbox.git
-> git fetch zena
-> git checkout --track -b zena zena/master  # this is the gold master for zena
+> git clone git@github.com:john/PROJECT.git
+> cd PROJECT
+> git remote add PROJECT git://github.com/PROJECT/PROJECT.git
+> git fetch PROJECT
+> git checkout --track -b gold PROJECT/master  # this is the gold master for PROJECT
 
 Working on new 'floppy' feature
 -------------------------------
 
 [John] (developer, on his own fork)
+> git co gold
+> git pull
 > git co -b floppy
 > commit, commit
+# propose
 > push origin floppy
 
-[zena] (reviewer)
-> git remote add john git://github.com/john/sandbox.git
+[PROJECT] (reviewer)
+# only if john is not a remote yet
+> git remote add john git://github.com/john/PROJECT.git
 > git fetch john
-> git co -b john/floppy   # why not --track ?
-# review --> no good
+# review
+> git checkout -b john_floppy   # why not --track ?
+> git pull john floppy
+> git rebase master
+# fail
+> git checkout master
+> git branch -D john_floppy   # we would not need this with --track...
 
 [John]
 > reset, commit, squash, etc
+# propose
 > git push origin +floppy   # force floppy sync
 
-[zena]
-> git co master
-> git branch -D john/floppy   # we would not need this with --track...
-> git co -b john/floppy
+[PROJECT]
+# review
+> git co -b john_floppy
+> git pull john floppy
 > git rebase master
 # ok
 > git co master
-> git merge --ff john/floppy
-> git branch -D john/floppy
+> git merge --ff john_floppy
+> git branch -D john_floppy
 > git push
+
+[John]
+# cleanup
+> git co gold
+> git pull
+> git branch -d floppy
+> git push origin :floppy

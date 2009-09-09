@@ -3,9 +3,17 @@
 # Sending mail not working on mac os x ?
 # http://www.macosxhints.com/article.php?story=20081217161612647
 
+# install
+# > sudo cp gold /usr/local/bin/
+# > chmod a+x /usr/local/bin/gold
+
+# TODO: move Settings inside each project ?
+
 class Gold
   Settings = {
     :gold_branch     => 'gold',                  # name of local branch tracking gold master (in developer's local git)
+    :gold_remote     => 'zena',                  # name of remote 'gold' reference project
+    :gold_repository => 'git://github.com/zena/zena.git',
     :developer_name  => 'john',                  # developer's name
     :developer_email => 'developer@example.com', # developer's email
     :reviewer        => 'reviewer@example.com'   # reviewer's email
@@ -13,12 +21,16 @@ class Gold
   
   def run(args)
     case args[0]
+    when 'add_dev'
+      add_dev args[1], args[2]
     when 'check', 'review'
       review args[1]
     when 'ok'
       ok
     when 'fail'
       fail
+    when 'setup'
+      setup
     when 'propose'
       propose
     when 'cleanup'
@@ -29,9 +41,15 @@ class Gold
 Reviewer
 ========
 
+Add a new developer reference
+-----------------------------
+> gold add_dev john
+or
+> gold add_dev john git://github.com/john/foo.git
+
 Checkout a remote branch and view diff
 --------------------------------------
-> gold check remote/branch
+> gold check john/floppy
 
 Include commits into master branch
 ----------------------------------
@@ -45,6 +63,10 @@ The code is not ready yet, cleanup
 
 Developer
 =========
+
+Setup
+-----
+> gold setup
 
 Propose branch
 --------------
@@ -60,6 +82,12 @@ Cleanup after commit acceptation
     end
   end
   
+  def setup
+    return error("Could create remote #{Settings[:gold_remote]}.") unless system("git remote add #{Settings[:gold_remote]} #{Settings[:gold_repository]}")
+    return error("Could not fetch #{Settings[:gold_remote]}.") unless system("git fetch #{Settings[:gold_remote]}")
+    return error("Could not create #{Settings[:gold_branch]} branch.") unless system("git checkout --track -b #{Settings[:gold_branch]} #{Settings[:gold_remote]}/master")
+  end
+  
   def propose
     branch = current_branch
     return error("Could not find current branch.") unless branch
@@ -68,6 +96,13 @@ Cleanup after commit acceptation
     return error("Could not send email to #{Settings[:reviewer]}.") unless system(
     "printf 'From:#{Settings[:developer_email]}\\nSubject: #{message}\\n\\n#{message}' | sendmail -F '#{Settings[:developer_name]}' #{Settings[:reviewer]}")
     puts "Mail sent to #{Settings[:reviewer]}"
+  end
+  
+  def add_dev(name, repo = nil)
+    return error("Missing 'developer name' parameter.") unless name
+    repo ||= "git://github.com/#{name}/#{Settings[:gold_remote]}.git"
+    return error("Could add developer #{name} (#{repo}).") unless system("git remote add #{name} #{repo}")
+    return error("Could not fetch #{name}.") unless system("git fetch #{name}")
   end
   
   def review(remote_branch)
@@ -103,9 +138,9 @@ Cleanup after commit acceptation
   def cleanup
     branch = current_branch
     return error("Could not find current branch.") unless branch
-    return error("You cannot 'cleanup' master !") unless branch != 'master'
-    return error("Could not checkout master.") unless system("git co master")
-    return error("Could not pull #{Settings[:gold_branch]} into master.") unless system("git pull #{Settings[:gold_branch]} master")
+    return error("You cannot 'cleanup' master or #{Settings[:gold_branch]} !") if branch == 'master' || branch == Settings[:gold_branch]
+    return error("Could not checkout #{Settings[:gold_branch]}.") unless system("git co #{Settings[:gold_branch]}")
+    return error("Could not pull #{Settings[:gold_remote]}.") unless system("git pull #{Settings[:gold_remote]}")
     return nil unless remove(branch)
     return error("Could not clear remote branch.") unless system("git push origin :#{branch}")
   end
