@@ -139,10 +139,11 @@ gold review #{Settings[:developer_name]}/#{branch}
       yn = STDIN.gets
       if yn.downcase.strip == 'y'
         return error("Could not delete #{branch}.") unless system("git branch -#{force ? 'D' : 'd'} #{branch}")
+        true
       else
         return error("Could not checkout #{branch}.") unless system("git co #{branch}")
+        false
       end
-      true
     end
 
     def show_usage
