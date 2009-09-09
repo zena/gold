@@ -14,7 +14,7 @@ class Gold
     :gold_branch     => 'gold',                  # name of local branch tracking gold master (in developer's local git)
     :gold_remote     => 'zena',                  # name of remote 'gold' reference project
     :gold_repository => 'git://github.com/zena/zena.git',
-    :developer_name  => 'john',                  # developer's name
+    :developer_name  => 'john',                  # developer's name (same as github account)
     :developer_email => 'developer@example.com', # developer's email
     :reviewer        => 'reviewer@example.com'   # reviewer's email
   }
