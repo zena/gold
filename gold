@@ -137,7 +137,7 @@ gold review #{Settings[:developer_name]}/#{branch}
     def remove(branch, force=false)
       print "Remove branch #{branch} ? (y,N) "
       yn = STDIN.gets
-      if yn == "y\n"
+      if yn.downcase.strip == 'y'
         return error("Could not delete #{branch}.") unless system("git branch -#{force ? 'D' : 'd'} #{branch}")
       else
         return error("Could not checkout #{branch}.") unless system("git co #{branch}")
