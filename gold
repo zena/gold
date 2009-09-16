@@ -46,6 +46,8 @@ class Gold
   def propose(msg)
     branch = current_branch
     return error("Could not find current branch.") unless branch
+    return error("You cannot propose the #{Settings[:gold_branch]} branch !") if branch == Settings[:gold_branch]
+    return error("You cannot propose the master branch !") if branch == 'master'
     return error("Could not checkout #{Settings[:gold_branch]}.") unless system("git checkout #{Settings[:gold_branch]}")
     return error("Could not pull #{Settings[:gold_branch]}.") unless system("git pull")
     return error("Could not checkout #{branch}.") unless system("git checkout #{branch}")
