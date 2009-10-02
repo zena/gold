@@ -1,5 +1,8 @@
-Introduction
-============
+== SUMMARY:
+
+Gold is a simple executable that helps git teamwork.
+
+== DESCRIPTION:
 
 This is the workflow we use when developing zena.
 
@@ -13,9 +16,8 @@ are added.
 Any questions ? Ask zena's mailing list: http://zenadmin.org/en/community
 
                                      ~~
-                                     
-Workflow
-========
+
+== Workflow:
 
 You need to update the Settings in the 'gold' script to match your own project and emails.
 
@@ -40,10 +42,9 @@ Working on new 'floppy' feature
 # propose
 > gold propose
 
-[PROJECT] (reviewer)
+[reviewer]
 # only if john is not a remote yet
-> git remote add john git://github.com/john/PROJECT.git
-> git fetch john
+> gold add_dev john
 # review
 > gold review john/floppy
 # fail
@@ -54,7 +55,7 @@ Working on new 'floppy' feature
 # propose again
 > gold propose
 
-[PROJECT]
+[reviewer]
 # review
 > gold review john/floppy
 # ok

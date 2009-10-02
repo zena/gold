@@ -1,0 +1,16 @@
+== 0.3.0 2009-10-02
+
+* 1 major enhancement:
+  * Storing 'settings' in the projects .git directory
+  * Added 'rebase' method.
+  * Made a gem
+
+== 0.2.0 2009-09-08
+
+* 1 major enhancement:
+  * Added 'add_dev' and 'setup' methods
+
+== 0.1.0 2009-09-06
+
+* 1 major enhancement:
+  * Initial alpha release
