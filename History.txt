@@ -1,4 +1,4 @@
-== 0.3.0 2009-10-02
+== 0.3.1 2009-10-02
 
 * 1 major enhancement:
   * Storing 'settings' in the projects .git directory

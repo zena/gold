@@ -68,6 +68,7 @@ class Gold
   end
 
   def rebase
+    branch = current_branch
     return error("Could not find current branch.") unless branch
     return error("You cannot rebase the #{gold_branch} branch !") if branch == gold_branch
     return error("You cannot rebase the master branch !") if branch == 'master'

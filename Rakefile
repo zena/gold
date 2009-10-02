@@ -14,7 +14,7 @@ PROJ.summary = 'Gold is a simple executable that helps git teamwork.'
 PROJ.authors = 'Gaspard Bucher'
 PROJ.email = 'gaspard@teti.ch'
 PROJ.url = 'http://zenadmin.org/574'
-PROJ.version = '0.3.0'
+PROJ.version = '0.3.1'
 PROJ.rubyforge.name = 'gold'
 
 PROJ.spec.opts << '--color'
