@@ -149,7 +149,7 @@ gold review #{developer_name}/#{branch}
     return error("Could not checkout #{gold_branch}.") unless system("git co #{gold_branch}")
     return error("Could not pull #{gold_remote}.") unless system("git pull #{gold_remote}")
     return error("Could not checkout #{branch}.") unless system("git co #{branch}")
-    return error("Could rebase on top of #{gold_branch}.") unless system("git rebase #{gold_branch}")
+    return error("Could not rebase on top of #{gold_branch}.") unless system("git rebase #{gold_branch}")
     return error("Could not checkout #{gold_branch}.") unless system("git co #{gold_branch}")
     return nil unless remove(branch)
     return error("Could not clear remote branch.") unless system("git push origin :#{branch}")
