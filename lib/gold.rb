@@ -12,6 +12,7 @@ require 'yaml'
 # TODO: move Settings inside each project ?
 
 class Gold
+  VERSION = '0.4.0'
 
   DefaultSettings = {
     'gold_branch'     => 'gold',                  # name of local branch tracking gold master (in developer's local git)
@@ -19,7 +20,8 @@ class Gold
     'gold_repository' => 'git://github.com/zena/zena.git',
     'developer_name'  => 'john',                  # developer's name (same as github account)
     'developer_email' => 'developer@example.com', # developer's email
-    'reviewer'        => 'reviewer@example.com'   # reviewer's email
+    'reviewer'        => 'reviewer@example.com',  # reviewer's email
+    'gold_master'     => 'master'                 # name of reviewer's 'gold' branch (usually master)
   }
 
   SettingsMessages = {
@@ -116,10 +118,10 @@ gold review #{developer_name}/#{branch}
     return error("Missing 'remote_branch' parameter.") unless remote_branch
     return error("'remote_branch' format should be remote/branch.") unless remote_branch =~ /^(.+)\/(.+)$/
     remote, branch = $1, $2
-    return error("Could not checkout master.") unless system("git co master")
+    return error("Could not checkout master.") unless system("git co #{gold_master}")
     return error("Could not checkout #{remote}_#{branch}.") unless system("git co -b #{remote}_#{branch}")
     return error("Could not pull #{remote_branch}.") unless system("git pull #{remote} #{branch}")
-    return error("Could not rebase.") unless system("git rebase master")
+    return error("Could not rebase.") unless system("git rebase #{gold_master}")
     system("git diff master | $EDITOR")
     true
   end
@@ -127,18 +129,18 @@ gold review #{developer_name}/#{branch}
   def ok
     branch = current_branch
     return error("Could not find current branch.") unless branch
-    return error("Could not rebase.") unless system("git rebase master")
-    return error("Could not checkout master.") unless system("git co master")
-    return error("Could not fast-forward merge #{branch} into master.") unless system("git merge --ff #{branch}")
+    return error("Could not rebase.") unless system("git rebase #{gold_master}")
+    return error("Could not checkout #{gold_master}.") unless system("git co #{gold_master}")
+    return error("Could not fast-forward merge #{branch} into #{gold_master}.") unless system("git merge --ff #{branch}")
     return error("Could not delete #{branch}.") unless system("git branch -d #{branch}")
-    puts "-------------------\n\nSuccessfully applied #{branch} to golden master !\n\nPlease git push when you are ready."
+    puts "-------------------\n\nSuccessfully applied #{branch} to golden #{gold_master} !\n\nPlease git push when you are ready."
   end
 
   def fail
     branch = current_branch
     return error("Could not find current branch.") unless branch
-    return error("You cannot 'fail' master !") unless branch != 'master'
-    return error("Could not checkout master.") unless system("git co master")
+    return error("You cannot 'fail' #{gold_master} !") unless branch != gold_master
+    return error("Could not checkout #{gold_master}.") unless system("git co #{gold_master}")
     return nil unless remove(branch, true)
   end
 

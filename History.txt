@@ -1,6 +1,11 @@
-== 0.3.1 2009-10-02
+== 0.4.0 2009-02-01
 
 * 1 major enhancement:
+  * Added a 'gold_master' setting
+
+== 0.3.1 2009-10-02
+
+* 3 major enhancements:
   * Storing 'settings' in the projects .git directory
   * Added 'rebase' method.
   * Made a gem
