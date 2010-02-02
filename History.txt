@@ -1,3 +1,8 @@
+== 0.4.1 2009-02-02
+
+* 1 minor enhancement:
+  * Fixed review (should diff against gold_master setting)
+
 == 0.4.0 2009-02-01
 
 * 1 major enhancement:

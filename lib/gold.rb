@@ -122,7 +122,7 @@ gold review #{developer_name}/#{branch}
     return error("Could not checkout #{remote}_#{branch}.") unless system("git co -b #{remote}_#{branch}")
     return error("Could not pull #{remote_branch}.") unless system("git pull #{remote} #{branch}")
     return error("Could not rebase.") unless system("git rebase #{gold_master}")
-    system("git diff master | $EDITOR")
+    system("git diff #{gold_master} | $EDITOR")
     true
   end
 
