@@ -26,7 +26,7 @@ class Gold
 
   SettingsMessages = {
     '1. gold_branch'     => 'name of local branch that will track gold master',
-    '2. gold_remote'     => 'name of remote gold master',
+    '2. gold_remote'     => 'local name for remote gold master',
     '3. gold_repository' => 'remote repository',
     '4. developer_name'  => 'developer\'s account on remote repository',
     '5. developer_email' => 'developer\'s email',
@@ -44,6 +44,9 @@ class Gold
   end
 
   def run(args)
+    if settings.nil? && !%w{setup settings}.include?(args[0])
+      return error("Please run 'gold settings' first (missing .git/gold.yml settings)\n")
+    end
     case args[0]
     when 'add_dev'
       add_dev args[1], args[2]
@@ -190,7 +193,7 @@ gold review #{developer_name}/#{branch}
 
     def create_settings_file
       FileUtils::mkpath(File.dirname(settings_path)) unless File.exist?(File.dirname(settings_path))
-      defaults = settings
+      defaults = DefaultSettings.merge(settings || {})
       new_settings = {}
       SettingsMessages.keys.sort.each do |key|
         real_key = key.gsub(/\A.*? /,'')
@@ -210,7 +213,7 @@ gold review #{developer_name}/#{branch}
         if File.exist?(settings_path)
           YAML::load(File.read(settings_path))
         else
-          DefaultSettings
+          nil
         end
       end
     end

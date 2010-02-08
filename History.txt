@@ -1,3 +1,8 @@
+== 0.4.2 2009-02-08
+
+* 1 minor enhancement:
+  * Should ask for setup instead of using default settings.
+
 == 0.4.1 2009-02-02
 
 * 1 minor enhancement:
