@@ -12,7 +12,7 @@ require 'yaml'
 # TODO: move Settings inside each project ?
 
 class Gold
-  VERSION = '0.4.0'
+  VERSION = '0.4.3'
 
   DefaultSettings = {
     'gold_branch'     => 'gold',                  # name of local branch tracking gold master (in developer's local git)
@@ -26,11 +26,12 @@ class Gold
 
   SettingsMessages = {
     '1. gold_branch'     => 'name of local branch that will track gold master',
-    '2. gold_remote'     => 'local name for remote gold master',
-    '3. gold_repository' => 'remote repository',
+    '2. gold_remote'     => 'name for remote "gold" project',
+    '3. gold_repository' => '"gold" project remote repository',
     '4. developer_name'  => 'developer\'s account on remote repository',
     '5. developer_email' => 'developer\'s email',
-    '6. reviewer'        => 'reviewer\'s email'
+    '6. reviewer'        => 'reviewer\'s email',
+    '7. gold_master'     => 'reviewer only: name of current "gold" branch'
   }
 
   DefaultSettings.keys.each do |k|
@@ -197,7 +198,7 @@ gold review #{developer_name}/#{branch}
       new_settings = {}
       SettingsMessages.keys.sort.each do |key|
         real_key = key.gsub(/\A.*? /,'')
-        print "#{SettingsMessages[key]} (#{defaults[real_key]}): "
+        print "#{SettingsMessages[key]} (#{real_key}: #{defaults[real_key]}) "
         value = STDIN.gets.chomp
         new_settings[real_key] = value == '' ? DefaultSettings[real_key] : value
       end

@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{gold}
-  s.version = "0.4.2"
+  s.version = "0.4.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Gaspard Bucher"]
-  s.date = %q{2010-02-01}
+  s.date = %q{2010-02-09}
   s.default_executable = %q{gold}
   s.description = %q{This is the workflow we use when developing zena.
 
