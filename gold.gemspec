@@ -22,10 +22,10 @@ Any questions ? Ask zena's mailing list: http://zenadmin.org/en/community
                                      ~~}
   s.email = %q{gaspard@teti.ch}
   s.executables = ["gold"]
-  s.extra_rdoc_files = ["History.txt", "README.txt", "bin/gold"]
-  s.files = ["History.txt", "README.txt", "bin/gold", "lib/gold.rb"]
+  s.extra_rdoc_files = ["History.txt", "README.rdoc", "bin/gold"]
+  s.files = ["History.txt", "README.rdoc", "bin/gold", "lib/gold.rb"]
   s.homepage = %q{http://zenadmin.org/574}
-  s.rdoc_options = ["--main", "README.txt"]
+  s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{gold}
   s.rubygems_version = %q{1.3.5}
