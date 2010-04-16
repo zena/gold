@@ -1,6 +1,11 @@
+== 0.4.4 2010-04-16
+
+* 1 minor enhancement:
+  * Added 'gold_master' setting for developer.
+
 == 0.4.3 2009-02-09
 
-* 2 minor enhancement:
+* 2 minor enhancements:
   * Added a gold_master setting (reviewer only).
   * Gave other settings a better message (at least I tried).
 

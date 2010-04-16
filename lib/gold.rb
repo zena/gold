@@ -12,7 +12,7 @@ require 'yaml'
 # TODO: move Settings inside each project ?
 
 class Gold
-  VERSION = '0.4.3'
+  VERSION = '0.4.4'
 
   DefaultSettings = {
     'gold_branch'     => 'gold',                  # name of local branch tracking gold master (in developer's local git)
@@ -31,7 +31,7 @@ class Gold
     '4. developer_name'  => 'developer\'s account on remote repository',
     '5. developer_email' => 'developer\'s email',
     '6. reviewer'        => 'reviewer\'s email',
-    '7. gold_master'     => 'reviewer only: name of current "gold" branch'
+    '7. gold_master'     => 'name of current "gold" branch (usually "master")'
   }
 
   DefaultSettings.keys.each do |k|
@@ -70,7 +70,7 @@ class Gold
     return error("Could not create settings file #{settings_path.inspect}.") unless create_settings_file
     return error("Could create remote #{gold_remote}.") unless system("git remote add #{gold_remote} #{gold_repository}")
     return error("Could not fetch #{gold_remote}.") unless system("git fetch #{gold_remote}")
-    return error("Could not create #{gold_branch} branch.") unless system("git checkout --track -b #{gold_branch} #{gold_remote}/master")
+    return error("Could not create #{gold_branch} branch.") unless system("git checkout --track -b #{gold_branch} #{gold_remote}/#{gold_master}")
   end
 
   def rebase
