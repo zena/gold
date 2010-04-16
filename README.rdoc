@@ -24,44 +24,49 @@ You need to update the Settings in the 'gold' script to match your own project a
 Developer setup
 ---------------
 
-1. login on github (John)
-2. fork sandbox
-3. on local machine, clone your own fork
-> git clone git@github.com:john/PROJECT.git
-> cd PROJECT
-> gold setup
+ 1. login on github (John)
+ 2. fork sandbox
+ 3. on local machine, clone your own fork
+ > git clone git@github.com:john/PROJECT.git
+ > cd PROJECT
+ > gold setup
 
 Working on new 'floppy' feature
 -------------------------------
 
 [John] (developer, on his own fork)
-> git checkout gold
-> git pull
-> git checkout -b floppy
-> commit, commit
-# propose
-> gold propose
+
+ > git checkout gold
+ > git pull
+ > git checkout -b floppy
+ > commit, commit
+ # propose
+ > gold propose
 
 [reviewer]
-# only if john is not a remote yet
-> gold add_dev john
-# review
-> gold review john/floppy
-# fail
-> gold fail
+
+ # only if john is not a remote yet
+ > gold add_dev john
+ # review
+ > gold review john/floppy
+ # fail
+ > gold fail
 
 [John]
-> reset, commit, squash, etc
-# propose again
-> gold propose
+
+ > reset, commit, squash, etc
+ # propose again
+ > gold propose
 
 [reviewer]
-# review
-> gold review john/floppy
-# ok
-> gold ok
+
+ # review
+ > gold review john/floppy
+ # ok
+ > gold ok
 
 [John]
-# cleanup
-> git co floppy
-> gold cleanup
+
+ # cleanup
+ > git co floppy
+ > gold cleanup
