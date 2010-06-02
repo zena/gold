@@ -126,7 +126,15 @@ gold review #{developer_name}/#{branch}
     return error("Could not checkout #{remote}_#{branch}.") unless system("git co -b #{remote}_#{branch}")
     return error("Could not pull #{remote_branch}.") unless system("git pull #{remote} #{branch}")
     return error("Could not rebase.") unless system("git rebase #{gold_master}")
-    system("git diff #{gold_master} | $EDITOR")
+    tmpf = Tempfile.new('gold_msg')
+    tmpf.write %Q{============= Commits ============
+#{`git log #{gold_master}..HEAD`}
+
+============= Diff ============
+#{`git diff #{gold_master}`}
+}
+    tmpf.close
+    system("$EDITOR #{tmpf.path}")
     true
   end
 
