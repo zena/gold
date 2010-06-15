@@ -12,7 +12,7 @@ require 'yaml'
 # TODO: move Settings inside each project ?
 
 class Gold
-  VERSION = '0.4.4'
+  VERSION = '0.4.6'
 
   DefaultSettings = {
     'gold_branch'     => 'gold',                  # name of local branch tracking gold master (in developer's local git)
@@ -68,7 +68,17 @@ class Gold
 
   def setup
     return error("Could not create settings file #{settings_path.inspect}.") unless create_settings_file
-    return error("Could create remote #{gold_remote}.") unless system("git remote add #{gold_remote} #{gold_repository}")
+    # Check if remote exists:
+    if remote = `git remote -v`.split("\n").detect { |l| l =~ /^#{gold_remote}\s+([^\s]+)/ }
+      if $1 == gold_repository
+        # ok
+      else
+        return error("Remote '#{gold_remote}' exists with different setting ('#{$1}'). Abort.")
+      end
+    else
+      return error("Could create remote #{gold_remote}.") unless system("git remote add #{gold_remote} #{gold_repository}")
+    end
+
     return error("Could not fetch #{gold_remote}.") unless system("git fetch #{gold_remote}")
     return error("Could not create #{gold_branch} branch.") unless system("git checkout --track -b #{gold_branch} #{gold_remote}/#{gold_master}")
   end
@@ -208,7 +218,7 @@ gold review #{developer_name}/#{branch}
         real_key = key.gsub(/\A.*? /,'')
         print "#{SettingsMessages[key]} (#{real_key}: #{defaults[real_key]}) "
         value = STDIN.gets.chomp
-        new_settings[real_key] = value == '' ? DefaultSettings[real_key] : value
+        new_settings[real_key] = value == '' ? defaults[real_key] : value
       end
       File.open(settings_path, 'wb') do |f|
         f.puts YAML::dump(new_settings)
